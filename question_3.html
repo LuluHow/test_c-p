@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test me!</title>
+</head>
+<body>
+    <button id="test">Test</button>
+  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script>
+        window.onload = function() {
+
+            var promise = new Promise(function(resolve, reject) {
+                $.ajax({
+                    method: 'GET',
+                    url: 'http://jsonplaceholder.typicode.com/post',
+                    complete: function(jqxhr) {
+                        resolve(jqxhr.status);
+                    }
+                });
+            });
+
+            document.getElementById('test').onclick = function() {
+                promise.then(function(status) {
+                    switch(status) {
+                        case 404:
+                            notFound('bla', 'blabla@bla.com');
+                            break;
+                        case 503:
+                            internalEror('bli', 'blibli@bli.com');
+                            break;
+                        default:
+                            console.log('All is OK');
+                            break;
+                    }
+                });
+            };
+
+            function notFound(username, email) {
+                alert('not found');
+
+                var data = new FormData();
+                data.append('username', username);
+                data.append('email', email);
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'blabla', true);
+
+                xhr.send(data);
+            };
+
+            function internalError(username, email) {
+                alert('internal error');
+
+                var data = new FormData();
+                data.append('username', username);
+                data.append('email', email);
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'blibli', true);
+
+                xhr.send(data);
+            };
+        };
+    </script>
+</body>
+
